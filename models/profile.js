@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       avatarUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       userId: {
         type: DataTypes.INTEGER,

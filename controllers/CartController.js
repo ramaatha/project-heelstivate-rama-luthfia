@@ -4,7 +4,7 @@ const { formatRupiah } = require("../helpers/helper");
 class CartController {
   static async getCart(req, res) {
     try {
-      const userId = req.session.userId;
+      const { userId } = req.session;
 
       const carts = await Cart.findAll({
         where: { userId },
@@ -24,9 +24,10 @@ class CartController {
 
   static async postAddToCart(req, res) {
     try {
-      const userId = req.session.userId;
-      const productId = req.params.productId;
-      const quantity = Number(req.body.quantity) || 1;
+      const { userId } = req.session;
+      const { productId } = req.params;
+      const { quantity: rawQty } = req.body;
+      const quantity = Number(rawQty) || 1;
 
       const product = await Product.findByPk(productId);
       if (!product) {
@@ -61,7 +62,7 @@ class CartController {
 
   static async postDeleteCart(req, res) {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const cart = await Cart.findByPk(id);
       if (!cart) throw new Error("Item tidak ditemukan");
       await cart.destroy();

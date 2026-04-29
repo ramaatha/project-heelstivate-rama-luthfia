@@ -97,6 +97,12 @@ a:hover {
   font-weight: 800;
   color: var(--earth-accent);
   letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.navbar-brand-text:hover {
+  color: var(--earth-accent);
+  text-decoration: none;
 }
 
 .navbar-brand-text span {

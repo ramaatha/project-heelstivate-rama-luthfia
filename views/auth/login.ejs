@@ -16,17 +16,17 @@
     </div>
 
     <% if (error) { %>
-      <div class="alert-earth mb-3">⚠️ <%= error %></div>
+      <p style="color:#c62828; font-size:0.9rem; margin-bottom:16px;">⚠️ <%= error %></p>
     <% } %>
 
-    <form action="/login" method="POST" class="form-earth">
+    <form action="/login" method="POST" class="form-earth" novalidate>
       <div class="mb-3">
         <label>Email</label>
-        <input type="email" name="email" class="form-control" placeholder="contoh@email.com" required>
+        <input type="email" name="email" class="form-control" placeholder="contoh@email.com">
       </div>
       <div class="mb-4">
         <label>Password</label>
-        <input type="password" name="password" class="form-control" placeholder="Password kamu" required>
+        <input type="password" name="password" class="form-control" placeholder="Password kamu">
       </div>
       <button type="submit" class="btn-earth w-100" style="border-radius:8px; padding:12px;">Masuk</button>
     </form>

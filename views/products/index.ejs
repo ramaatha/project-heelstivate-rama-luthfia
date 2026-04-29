@@ -50,6 +50,9 @@
           </div>
           <div class="col-md-2">
             <button type="submit" class="btn-earth w-100" style="border-radius:8px; padding:10px;">Filter</button>
+            <% if (search || categoryId || sort) { %>
+            <a href="/products" class="btn-earth-outline w-100 text-center d-block mt-2" style="border-radius:8px; padding:9px; font-size:0.85rem;">Reset</a>
+            <% } %>
           </div>
         </div>
       </form>

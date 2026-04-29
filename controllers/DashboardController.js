@@ -4,7 +4,7 @@ const { formatRupiah } = require("../helpers/helper");
 class DashboardController {
   static async getDashboard(req, res) {
     try {
-      const userId = req.session.userId;
+      const { userId } = req.session;
 
       const myProducts = await Product.findAll({
         where: { userId },

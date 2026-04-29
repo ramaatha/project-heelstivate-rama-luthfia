@@ -15,26 +15,30 @@
       <p style="color:var(--earth-muted); font-size:0.9rem; margin-top:6px;">Buat akun baru</p>
     </div>
 
-    <% if (error) { %>
-      <div class="alert-earth mb-3">⚠️ <%= error %></div>
+    <% if (errors && errors.length > 0) { %>
+      <div style="margin-bottom:16px;">
+        <% errors.forEach(function(msg) { %>
+        <p style="color:#c62828; font-size:0.9rem; margin-bottom:6px;">⚠️ <%= msg %></p>
+        <% }) %>
+      </div>
     <% } %>
 
-    <form action="/register" method="POST" class="form-earth">
+    <form action="/register" method="POST" class="form-earth" novalidate>
       <div class="mb-3">
         <label>Username</label>
-        <input type="text" name="username" class="form-control" placeholder="Username kamu" required>
+        <input type="text" name="username" class="form-control" placeholder="Username kamu">
       </div>
       <div class="mb-3">
         <label>Email</label>
-        <input type="email" name="email" class="form-control" placeholder="contoh@email.com" required>
+        <input type="email" name="email" class="form-control" placeholder="contoh@email.com">
       </div>
       <div class="mb-3">
         <label>Password</label>
-        <input type="password" name="password" class="form-control" placeholder="Min. 8 karakter" required>
+        <input type="password" name="password" class="form-control" placeholder="Min. 8 karakter">
       </div>
       <div class="mb-4">
         <label>Daftar sebagai</label>
-        <select name="role" class="form-select" required>
+        <select name="role" class="form-select">
           <option value="">-- Pilih role --</option>
           <option value="buyer">Buyer — Saya ingin berbelanja</option>
           <option value="seller">Seller — Saya ingin berjualan</option>

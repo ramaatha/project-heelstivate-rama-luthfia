@@ -5,9 +5,7 @@ const QRCode = require("qrcode");
 class ProductController {
   static async getProducts(req, res) {
     try {
-      const search = req.query.search || "";
-      const sort = req.query.sort || "";
-      const categoryId = req.query.categoryId || "";
+      const { search = "", sort = "", categoryId = "" } = req.query;
 
       const products = await Product.getAll({ search, sort, categoryId });
       const categories = await Category.findAll();
@@ -27,14 +25,14 @@ class ProductController {
 
   static async getProductDetail(req, res) {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const product = await Product.getById(id);
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
       }
 
-      const productUrl = `http://localhost:3000/products/${id}`;
+      const productUrl = `http://10.0.0.91:3000/products/${id}`;
       const qrCode = await QRCode.toDataURL(productUrl, {
         width: 180,
         margin: 2,
@@ -64,16 +62,18 @@ class ProductController {
 
   static async postAddProduct(req, res) {
     try {
+      const { userId } = req.session;
+      const { name, description, price, size, stock, imgUrl, categoryId } = req.body;
       await Product.create({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        size: req.body.size,
-        stock: req.body.stock,
+        name,
+        description,
+        price: price !== "" ? price : null,
+        size: size !== "" ? size : null,
+        stock: stock !== "" ? stock : null,
         sold: 0,
-        imgUrl: req.body.imgUrl,
-        categoryId: req.body.categoryId,
-        userId: req.session.userId,
+        imgUrl,
+        categoryId,
+        userId,
       });
 
       res.redirect("/products");
@@ -86,7 +86,7 @@ class ProductController {
 
   static async getEditProduct(req, res) {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const product = await Product.getById(id);
 
       if (!product) {
@@ -94,7 +94,7 @@ class ProductController {
       }
 
       const categories = await Category.findAll();
-      res.render("products/edit", { product, categories, error: null });
+      res.render("products/edit", { product, categories, errors: [] });
     } catch (error) {
       res.send(error.message);
     }
@@ -102,7 +102,8 @@ class ProductController {
 
   static async postEditProduct(req, res) {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
+      const { name, description, price, size, stock, imgUrl, categoryId } = req.body;
       const product = await Product.findByPk(id);
 
       if (!product) {
@@ -110,26 +111,26 @@ class ProductController {
       }
 
       await product.update({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        size: req.body.size,
-        stock: req.body.stock,
-        imgUrl: req.body.imgUrl,
-        categoryId: req.body.categoryId,
+        name,
+        description,
+        price: price !== "" ? price : null,
+        size: size !== "" ? size : null,
+        stock: stock !== "" ? stock : null,
+        imgUrl,
+        categoryId,
       });
 
       res.redirect("/products");
     } catch (error) {
-      const errorMsg = error.errors ? error.errors[0].message : error.message;
+      const errors = error.errors ? error.errors.map((e) => e.message) : [error.message];
       const product = await Product.findByPk(req.params.id);
       const categories = await Category.findAll();
-      res.render("products/edit", { product, categories, error: errorMsg });
+      res.render("products/edit", { product, categories, errors });
     }
   }
 
   static postDeleteProduct(req, res) {
-    const id = req.params.id;
+    const { id } = req.params;
 
     Product.findByPk(id)
       .then((product) => {
