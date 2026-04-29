@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heelstivate — Premium Shoes Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+  <%- include('partials/navbar') %>
+
+  <section class="page-hero">
+    <div class="container text-center position-relative" style="z-index:1;">
+      <p style="color:var(--earth-gold); font-weight:700; letter-spacing:2px; font-size:0.82rem; text-transform:uppercase; margin-bottom:14px;">Premium Footwear Collection</p>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem); font-weight:900; line-height:1.1; margin-bottom:18px;">
+        Sepatu Terbaik untuk<br>
+        <span style="color:var(--earth-gold);">Setiap Langkahmu</span>
+      </h1>
+      <p style="color:#c9b8ac; font-size:1rem; max-width:480px; margin:0 auto 32px;">
+        Koleksi terlengkap dari brand ternama dunia — Sports, Casual, Formal, hingga Womenswear.
+      </p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="/products" class="btn-gold" style="padding:13px 32px; font-size:1rem; border-radius:8px; display:inline-block;">Lihat Koleksi</a>
+        <a href="/register" style="border:2px solid #c9b8ac; color:#c9b8ac; background:transparent; font-weight:700; padding:11px 32px; font-size:1rem; border-radius:8px; display:inline-block;">Daftar Gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <a href="/products?categoryId=1" style="text-decoration:none;">
+          <div style="background:linear-gradient(135deg,#4E342E,#795548); border-radius:14px; padding:28px 16px; text-align:center; color:#fff; transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2.2rem; margin-bottom:10px;">👟</div>
+            <div style="font-weight:700;">Sports</div>
+            <div style="font-size:0.78rem; color:#d7c4bc; margin-top:3px;">Running · Football</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="/products?categoryId=2" style="text-decoration:none;">
+          <div style="background:linear-gradient(135deg,#6D4C41,#A1887F); border-radius:14px; padding:28px 16px; text-align:center; color:#fff; transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2.2rem; margin-bottom:10px;">👞</div>
+            <div style="font-weight:700;">Casual</div>
+            <div style="font-size:0.78rem; color:#f0e0d8; margin-top:3px;">Sneakers · Canvas</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="/products?categoryId=3" style="text-decoration:none;">
+          <div style="background:linear-gradient(135deg,#3E2723,#6D4C41); border-radius:14px; padding:28px 16px; text-align:center; color:#fff; transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2.2rem; margin-bottom:10px;">🥿</div>
+            <div style="font-weight:700;">Formal</div>
+            <div style="font-size:0.78rem; color:#d7c4bc; margin-top:3px;">Oxford · Loafers</div>
+          </div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3">
+        <a href="/products?categoryId=4" style="text-decoration:none;">
+          <div style="background:linear-gradient(135deg,#8D6E63,#C8A84B); border-radius:14px; padding:28px 16px; text-align:center; color:#fff; transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2.2rem; margin-bottom:10px;">👠</div>
+            <div style="font-weight:700;">Womenswear</div>
+            <div style="font-size:0.78rem; color:#fdf0dc; margin-top:3px;">Heels · Flatshoes</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

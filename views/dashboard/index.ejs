@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Seller — Heelstivate</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div style="background: var(--earth-sand); border-bottom: 1px solid var(--earth-border); padding: 28px 0;">
+    <div class="container">
+      <h1 class="section-title" style="margin-bottom:4px;">Dashboard Seller</h1>
+      <p class="section-subtitle" style="margin-bottom:0;">Halo, <strong><%= session.username %></strong> 👋 — Pantau performa tokomu</p>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number"><%= myProducts.length %></div>
+          <div class="stat-label">Total Produk</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number"><%= myProducts.reduce(function(a, p) { return a + p.sold; }, 0) %></div>
+          <div class="stat-label">Total Terjual</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number"><%= totalStock %></div>
+          <div class="stat-label">Total Stok</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-number" style="font-size:1.2rem;"><%= formatRupiah(totalRevenue) %></div>
+          <div class="stat-label">Total Pendapatan</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-6">
+        <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:24px;">
+          <h6 style="font-weight:800; color:var(--earth-dark); margin-bottom:20px;">📊 Produk per Kategori</h6>
+          <canvas id="categoryChart" height="220"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:24px;">
+          <h6 style="font-weight:800; color:var(--earth-dark); margin-bottom:20px;">🔥 Top 6 Produk Terlaris</h6>
+          <canvas id="topProductChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:24px;">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h6 style="font-weight:800; color:var(--earth-dark); margin-bottom:0;">Semua Produk Saya</h6>
+        <a href="/products/add" class="btn-earth" style="border-radius:8px; padding:8px 20px; font-size:0.85rem;">+ Tambah Produk</a>
+      </div>
+      <% if (myProducts.length === 0) { %>
+        <p style="color:var(--earth-muted); text-align:center; padding:40px 0;">Belum ada produk. Yuk tambahkan produk pertamamu!</p>
+      <% } else { %>
+        <div class="table-responsive">
+          <table class="table" style="font-size:0.9rem;">
+            <thead style="background:var(--earth-sand);">
+              <tr>
+                <th style="color:var(--earth-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px;">Produk</th>
+                <th style="color:var(--earth-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px;">Kategori</th>
+                <th style="color:var(--earth-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px;">Harga</th>
+                <th style="color:var(--earth-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">Stok</th>
+                <th style="color:var(--earth-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">Terjual</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% myProducts.forEach(function(product) { %>
+                <tr style="vertical-align:middle;">
+                  <td>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                      <img src="<%= product.imgUrl || 'https://placehold.co/48x48/D7B896/3E2723?text=?' %>"
+                        style="width:48px; height:48px; border-radius:8px; object-fit:cover; border:1px solid var(--earth-border);" alt="">
+                      <div>
+                        <div style="font-weight:700; color:var(--earth-dark);">
+                          <%= product.name %>
+                          <% if (product.isBestSeller()) { %><span class="badge-terlaris" style="font-size:0.65rem; margin-left:6px;">🔥</span><% } %>
+                        </div>
+                        <div style="font-size:0.78rem; color:var(--earth-muted);">EU <%= product.size %></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge-category"><%= product.Category ? product.Category.name : '-' %></span></td>
+                  <td style="font-weight:700; color:var(--earth-primary);"><%= formatRupiah(product.price) %></td>
+                  <td style="text-align:center; font-weight:600;"><%= product.stock %></td>
+                  <td style="text-align:center; font-weight:600; color:var(--earth-primary);"><%= product.sold %></td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <a href="/products/<%= product.id %>/edit" style="font-size:0.8rem; color:var(--earth-primary); padding:4px 10px; border:1px solid var(--earth-border); border-radius:6px;">Edit</a>
+                      <form action="/products/<%= product.id %>/delete" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Hapus produk ini?')"
+                          style="font-size:0.8rem; color:#c62828; padding:4px 10px; border:1px solid #f0c8c8; border-radius:6px; background:none; cursor:pointer;">Hapus</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script>
+    var categoryData = <%- JSON.stringify(categoryCount) %>;
+    var topProducts = <%- JSON.stringify(topProducts.map(function(p) { return { name: p.name, sold: p.sold }; })) %>;
+
+    var earthColors = ['#6D4C41', '#8D6E63', '#A1887F', '#C8A84B', '#D7B896', '#3E2723'];
+
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(categoryData),
+        datasets: [{
+          data: Object.values(categoryData),
+          backgroundColor: earthColors,
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 16 } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('topProductChart'), {
+      type: 'bar',
+      data: {
+        labels: topProducts.map(function(p) { return p.name.length > 20 ? p.name.substring(0, 20) + '...' : p.name; }),
+        datasets: [{
+          label: 'Terjual',
+          data: topProducts.map(function(p) { return p.sold; }),
+          backgroundColor: '#6D4C41',
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f0e8de' } },
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

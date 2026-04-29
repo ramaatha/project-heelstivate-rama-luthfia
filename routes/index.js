@@ -1,0 +1,38 @@
+const express = require("express");
+const router = express.Router();
+
+const AuthController = require("../controllers/AuthController");
+const ProductController = require("../controllers/ProductController");
+const CartController = require("../controllers/CartController");
+const ProfileController = require("../controllers/ProfileController");
+const DashboardController = require("../controllers/DashboardController");
+const { isLoggedIn, isSeller } = require("../middlewares/auth");
+
+router.get("/", function (req, res) {
+  res.render("landing");
+});
+
+router.get("/login", AuthController.getLogin);
+router.post("/login", AuthController.postLogin);
+router.get("/register", AuthController.getRegister);
+router.post("/register", AuthController.postRegister);
+router.get("/logout", AuthController.logout);
+
+router.get("/products", ProductController.getProducts);
+router.get("/products/add", isLoggedIn, isSeller, ProductController.getAddProduct);
+router.post("/products", isLoggedIn, isSeller, ProductController.postAddProduct);
+router.get("/products/:id", ProductController.getProductDetail);
+router.get("/products/:id/edit", isLoggedIn, isSeller, ProductController.getEditProduct);
+router.post("/products/:id/update", isLoggedIn, isSeller, ProductController.postEditProduct);
+router.post("/products/:id/delete", isLoggedIn, isSeller, ProductController.postDeleteProduct);
+
+router.get("/cart", isLoggedIn, CartController.getCart);
+router.post("/cart/:productId", isLoggedIn, CartController.postAddToCart);
+router.post("/cart/:id/delete", isLoggedIn, CartController.postDeleteCart);
+
+router.get("/profile", isLoggedIn, ProfileController.getProfile);
+router.post("/profile/update", isLoggedIn, ProfileController.postUpdateProfile);
+
+router.get("/dashboard", isLoggedIn, isSeller, DashboardController.getDashboard);
+
+module.exports = router;

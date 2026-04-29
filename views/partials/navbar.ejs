@@ -1,0 +1,27 @@
+<nav class="navbar-earth">
+  <a href="/" class="navbar-brand-text">Heel<span>stivate</span></a>
+  <ul class="nav-links">
+    <li><a href="/products">Semua Produk</a></li>
+    <% if (session && session.userId) { %>
+      <% if (session.role === 'seller') { %>
+        <li><a href="/products/add">+ Jual</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+      <% } else { %>
+        <li><a href="/cart">🛒 Cart</a></li>
+      <% } %>
+      <li><a href="/profile"><%= session.username %></a></li>
+      <li><a href="/logout" class="btn-nav">Keluar</a></li>
+    <% } else { %>
+      <li><a href="/login">Masuk</a></li>
+      <li><a href="/register" class="btn-nav">Daftar</a></li>
+    <% } %>
+  </ul>
+</nav>
+<div style="background:var(--earth-primary);">
+  <div class="container" style="display:flex; gap:4px; padding-top:0; padding-bottom:0;">
+    <a href="/products?categoryId=1" style="color:#f0e0d8; font-size:0.82rem; font-weight:600; padding:8px 16px; display:inline-block; text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background=''">👟 Sports</a>
+    <a href="/products?categoryId=2" style="color:#f0e0d8; font-size:0.82rem; font-weight:600; padding:8px 16px; display:inline-block; text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background=''">👞 Casual</a>
+    <a href="/products?categoryId=3" style="color:#f0e0d8; font-size:0.82rem; font-weight:600; padding:8px 16px; display:inline-block; text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background=''">🥿 Formal</a>
+    <a href="/products?categoryId=4" style="color:#f0e0d8; font-size:0.82rem; font-weight:600; padding:8px 16px; display:inline-block; text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background=''">👠 Womenswear</a>
+  </div>
+</div>

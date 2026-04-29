@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk — Heelstivate</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body style="background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-primary) 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;">
+
+  <div class="auth-card">
+    <div class="text-center mb-4">
+      <a href="/" class="auth-logo d-block" style="text-decoration:none;">Heel<span>stivate</span></a>
+      <p style="color:var(--earth-muted); font-size:0.9rem; margin-top:6px;">Selamat datang kembali 👋</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert-earth mb-3">⚠️ <%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="form-earth">
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" placeholder="contoh@email.com" required>
+      </div>
+      <div class="mb-4">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Password kamu" required>
+      </div>
+      <button type="submit" class="btn-earth w-100" style="border-radius:8px; padding:12px;">Masuk</button>
+    </form>
+
+    <p class="text-center mt-4" style="font-size:0.9rem; color:var(--earth-muted);">
+      Belum punya akun? <a href="/register" style="color:var(--earth-primary); font-weight:700;">Daftar di sini</a>
+    </p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambah Produk — Heelstivate</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div style="background: var(--earth-sand); border-bottom: 1px solid var(--earth-border); padding: 28px 0;">
+    <div class="container">
+      <h1 class="section-title" style="margin-bottom:4px;">Tambah Produk Baru</h1>
+      <p class="section-subtitle" style="margin-bottom:0;">Isi detail produk yang ingin kamu jual</p>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:32px;">
+
+          <% if (error) { %>
+            <div class="alert-earth mb-4">⚠️ <%= error %></div>
+          <% } %>
+
+          <form action="/products" method="POST" class="form-earth">
+            <div class="mb-3">
+              <label>Nama Produk</label>
+              <input type="text" name="name" class="form-control" placeholder="Contoh: Nike Air Max 90" required>
+            </div>
+            <div class="mb-3">
+              <label>Deskripsi</label>
+              <textarea name="description" class="form-control" rows="4" placeholder="Deskripsi lengkap produk..." required></textarea>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label>Harga (Rp)</label>
+                <input type="number" name="price" class="form-control" placeholder="150000" min="1000" max="50000000" required>
+                <small style="color:var(--earth-muted); font-size:0.78rem;">Min Rp 1.000 · Max Rp 50.000.000</small>
+              </div>
+              <div class="col-md-6">
+                <label>Ukuran (EU)</label>
+                <input type="number" name="size" class="form-control" placeholder="42" min="20" max="50" required>
+                <small style="color:var(--earth-muted); font-size:0.78rem;">Ukuran EU 20 - EU 50</small>
+              </div>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label>Stok</label>
+                <input type="number" name="stock" class="form-control" placeholder="10" min="0" required>
+              </div>
+              <div class="col-md-6">
+                <label>Kategori</label>
+                <select name="categoryId" class="form-select" required>
+                  <option value="">-- Pilih Kategori --</option>
+                  <% categories.forEach(function(cat) { %>
+                    <option value="<%= cat.id %>"><%= cat.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label>URL Gambar</label>
+              <input type="url" name="imgUrl" class="form-control" placeholder="https://...">
+              <small style="color:var(--earth-muted); font-size:0.78rem;">Opsional · Masukkan link gambar produk</small>
+            </div>
+            <div class="d-flex gap-3">
+              <button type="submit" class="btn-earth" style="border-radius:8px; padding:12px 28px;">Simpan Produk</button>
+              <a href="/products" class="btn-earth-outline" style="border-radius:8px; padding:10px 24px;">Batal</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

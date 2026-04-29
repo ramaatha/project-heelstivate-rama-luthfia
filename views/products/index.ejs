@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi Sepatu — Heelstivate</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <div style="background: var(--earth-sand); border-bottom: 1px solid var(--earth-border); padding: 28px 0;">
+    <div class="container">
+      <h1 class="section-title" style="margin-bottom:4px;">Koleksi Sepatu</h1>
+      <p class="section-subtitle" style="margin-bottom:0;">
+        <%= products.length %> produk ditemukan
+        <% if (search) { %> untuk "<strong><%= search %></strong>"<% } %>
+      </p>
+    </div>
+  </div>
+
+  <div class="container py-4">
+    <div class="filter-bar">
+      <form method="GET" action="/products">
+        <div class="row g-2 align-items-end">
+          <div class="col-md-4">
+            <label class="form-earth" style="font-size:0.8rem; font-weight:700; color:var(--earth-muted); display:block; margin-bottom:6px;">Cari Produk</label>
+            <input type="text" name="search" class="form-control form-earth" placeholder="Nama sepatu..." value="<%= search %>">
+          </div>
+          <div class="col-md-3">
+            <label class="form-earth" style="font-size:0.8rem; font-weight:700; color:var(--earth-muted); display:block; margin-bottom:6px;">Kategori</label>
+            <select name="categoryId" class="form-select form-earth">
+              <option value="">Semua Kategori</option>
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat.id %>" <%= categoryId == cat.id ? 'selected' : '' %>><%= cat.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-earth" style="font-size:0.8rem; font-weight:700; color:var(--earth-muted); display:block; margin-bottom:6px;">Urutkan</label>
+            <select name="sort" class="form-select form-earth">
+              <option value="">Terbaru</option>
+              <option value="price_asc" <%= sort === 'price_asc' ? 'selected' : '' %>>Harga Terendah</option>
+              <option value="price_desc" <%= sort === 'price_desc' ? 'selected' : '' %>>Harga Tertinggi</option>
+              <option value="terlaris" <%= sort === 'terlaris' ? 'selected' : '' %>>🔥 Terlaris</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn-earth w-100" style="border-radius:8px; padding:10px;">Filter</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <% if (products.length === 0) { %>
+      <div class="text-center py-5">
+        <div style="font-size:3rem; margin-bottom:16px;">🔍</div>
+        <h4 style="color:var(--earth-muted);">Produk tidak ditemukan</h4>
+        <a href="/products" class="btn-earth-outline mt-3" style="display:inline-block;">Reset Filter</a>
+      </div>
+    <% } else { %>
+      <div class="row g-3">
+        <% products.forEach(function(product) { %>
+          <div class="col-6 col-md-4 col-lg-3">
+            <a href="/products/<%= product.id %>" style="text-decoration:none; display:block; height:100%;">
+              <div class="card-product">
+                <div style="position:relative;">
+                  <img src="<%= product.imgUrl || 'https://placehold.co/400x300/D7B896/3E2723?text=No+Image' %>"
+                    class="card-product-img" alt="<%= product.name %>">
+                  <% if (product.isBestSeller()) { %>
+                    <span class="badge-terlaris" style="position:absolute; top:10px; left:10px;">🔥 Terlaris</span>
+                  <% } %>
+                </div>
+                <div class="card-product-body">
+                  <% if (product.Category) { %>
+                    <div class="card-product-category"><%= product.Category.name %></div>
+                  <% } %>
+                  <div class="card-product-name"><%= product.name %></div>
+                  <div class="card-product-price"><%= formatRupiah(product.price) %></div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.78rem; color:var(--earth-muted);">EU <%= product.size %></span>
+                    <span style="font-size:0.78rem; color:var(--earth-muted);">Stok: <%= product.stock %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
