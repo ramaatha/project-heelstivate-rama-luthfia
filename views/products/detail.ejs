@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
   <%- include('../partials/navbar') %>
 
@@ -22,8 +24,7 @@
     <div class="row g-4">
       <div class="col-md-6">
         <div style="border-radius:16px; overflow:hidden; border:1px solid var(--earth-border);">
-          <img src="<%= product.imgUrl || 'https://placehold.co/600x500/D7B896/3E2723?text=No+Image' %>"
-            style="width:100%; height:460px; object-fit:cover; display:block;" alt="<%= product.name %>">
+          <img src="<%= product.imgUrl || 'https://placehold.co/600x500/D7B896/3E2723?text=No+Image' %>" style="width:100%; height:460px; object-fit:cover; display:block;" alt="<%= product.name %>">
         </div>
       </div>
 
@@ -31,10 +32,10 @@
         <div class="detail-sidebar">
           <div class="d-flex gap-2 flex-wrap mb-3">
             <% if (product.Category) { %>
-              <span class="badge-category"><%= product.Category.name %></span>
+            <span class="badge-category"><%= product.Category.name %></span>
             <% } %>
             <% if (product.isBestSeller()) { %>
-              <span class="badge-terlaris">🔥 Terlaris</span>
+            <span class="badge-terlaris">🔥 Terlaris</span>
             <% } %>
           </div>
 
@@ -61,37 +62,46 @@
           </div>
 
           <% if (product.User) { %>
-            <p style="font-size:0.85rem; color:var(--earth-muted); margin-bottom:8px;">
-              🏪 Dijual oleh <strong style="color:var(--earth-dark);"><%= product.User.username %></strong>
-            </p>
+          <p style="font-size:0.85rem; color:var(--earth-muted); margin-bottom:8px;">
+            🏪 Dijual oleh <strong style="color:var(--earth-dark);"><%= product.User.username %></strong>
+          </p>
           <% } %>
           <p style="font-size:0.82rem; color:var(--earth-muted); margin-bottom:20px;">
             🕐 Ditambahkan <%= timeAgo(product.createdAt) %> · <%= formatDate(product.createdAt) %>
           </p>
 
           <% if (session && session.role === 'buyer') { %>
-            <% if (product.stock > 0) { %>
-              <form action="/cart/<%= product.id %>" method="POST">
-                <div class="d-flex gap-2 mb-3">
-                  <div class="form-earth" style="flex:0 0 90px;">
-                    <input type="number" name="quantity" class="form-control" value="1" min="1" max="<%= product.stock %>" style="text-align:center; font-weight:700;">
-                  </div>
-                  <button type="submit" class="btn-earth flex-grow-1" style="border-radius:8px;">🛒 Masukkan Keranjang</button>
-                </div>
-              </form>
-            <% } else { %>
-              <button class="btn w-100 mb-3" disabled style="background:#e8e0d8; color:var(--earth-muted); border-radius:8px; padding:12px; font-weight:600;">Stok Habis</button>
-            <% } %>
+          <form action="/cart/<%= product.id %>" method="POST" id="addCartForm">
+            <div style="margin-bottom:16px;">
+              <div style="font-size:0.8rem; font-weight:700; color:var(--earth-muted); text-transform:uppercase; margin-bottom:8px;">Pilih Ukuran</div>
+              <div class="size-grid">
+                <% var minAvail = Math.max(20, product.size - 3); %>
+                <% var maxAvail = Math.min(50, product.size + 3); %>
+                <% for (var s = 20; s <= 50; s++) { %>
+                <% var isAvailable = (s >= minAvail && s <= maxAvail && product.stock > 0); %>
+                <button type="button" class="size-option <%= isAvailable ? 'size-available' : 'size-unavailable' %>" data-size="<%= s %>" <% if (!isAvailable) { %>disabled<% } %>>
+                  <%= s %>
+                </button>
+                <% } %>
+              </div>
+              <input type="hidden" name="size" id="selectedSize" value="">
+            </div>
+            <div class="d-flex gap-2 mb-3">
+              <div class="form-earth" style="flex:0 0 90px;">
+                <input type="number" name="quantity" class="form-control" value="1" min="1" max="<%= product.stock %>" style="text-align:center; font-weight:700;">
+              </div>
+              <button type="submit" id="addCartBtn" class="btn-earth flex-grow-1" style="border-radius:8px;">🛒 Masukkan Keranjang</button>
+            </div>
+          </form>
           <% } %>
 
           <% if (session && session.role === 'seller' && session.userId == product.userId) { %>
-            <div class="d-flex gap-2 mb-3">
-              <a href="/products/<%= product.id %>/edit" class="btn-earth-outline flex-grow-1" style="display:block; text-align:center; padding:10px; border-radius:8px;">✏️ Edit</a>
-              <form action="/products/<%= product.id %>/delete" method="POST" style="flex-grow:1;">
-                <button type="submit" onclick="return confirm('Yakin hapus produk ini?')"
-                  style="width:100%; background:#c62828; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer;">🗑️ Hapus</button>
-              </form>
-            </div>
+          <div class="d-flex gap-2 mb-3">
+            <a href="/products/<%= product.id %>/edit" class="btn-earth-outline flex-grow-1" style="display:block; text-align:center; padding:10px; border-radius:8px;">✏️ Edit</a>
+            <form action="/products/<%= product.id %>/delete" method="POST" style="flex-grow:1;">
+              <button type="submit" onclick="return confirm('Yakin hapus produk ini?')" style="width:100%; background:#c62828; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer;">🗑️ Hapus</button>
+            </form>
+          </div>
           <% } %>
 
           <a href="/products" style="font-size:0.85rem; color:var(--earth-muted);">← Kembali ke Koleksi</a>
@@ -106,5 +116,89 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .size-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .size-option {
+      border: 1.5px solid #ddd;
+      background: #fff;
+      color: #999;
+      border-radius: 8px;
+      width: 48px;
+      height: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: default;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .size-available {
+      border: 1.5px solid #bbb;
+      background: #fff;
+      color: var(--earth-text);
+      cursor: pointer;
+    }
+
+    .size-available:hover {
+      border-color: var(--earth-primary);
+      color: var(--earth-primary);
+    }
+
+    .size-option.selected {
+      background: var(--earth-primary) !important;
+      border-color: var(--earth-primary) !important;
+      color: #fff !important;
+      font-weight: 800;
+    }
+
+    .size-unavailable {
+      background: #f0ece8;
+      border-color: #e0d8d0;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .size-unavailable::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      background: #ccc;
+      transform: rotate(-45deg);
+    }
+  </style>
+  <script>
+    document.querySelectorAll('.size-available').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.size-option').forEach(function(b) {
+          b.classList.remove('selected');
+        });
+        btn.classList.add('selected');
+        document.getElementById('selectedSize').value = btn.dataset.size;
+        var badge = document.querySelector('.size-badge');
+        if (badge) badge.textContent = btn.dataset.size;
+      });
+    });
+
+    var form = document.getElementById('addCartForm');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        var size = document.getElementById('selectedSize').value;
+        if (!size) {
+          e.preventDefault();
+          alert('Pilih ukuran terlebih dahulu!');
+        }
+      });
+    }
+  </script>
 </body>
+
 </html>

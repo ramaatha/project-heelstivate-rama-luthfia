@@ -18,16 +18,6 @@ module.exports = {
       avatarUrl: {
         type: Sequelize.STRING,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        unique: true,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

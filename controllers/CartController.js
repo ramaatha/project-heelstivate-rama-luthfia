@@ -59,20 +59,20 @@ class CartController {
     }
   }
 
-  static async postDeleteCart(req, res) {
-    try {
-      var id = req.params.id;
-      var cart = await Cart.findByPk(id);
+  static postDeleteCart(req, res) {
+    var id = req.params.id;
 
-      if (!cart) {
-        return res.send("Item tidak ditemukan");
-      }
-
-      await cart.destroy();
-      res.redirect("/cart");
-    } catch (error) {
-      res.send(error.message);
-    }
+    Cart.findByPk(id)
+      .then(function (cart) {
+        if (!cart) throw new Error("Item tidak ditemukan");
+        return cart.destroy();
+      })
+      .then(function () {
+        res.redirect("/cart");
+      })
+      .catch(function (error) {
+        res.send(error.message);
+      });
   }
 }
 

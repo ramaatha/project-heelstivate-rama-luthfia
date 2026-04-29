@@ -90,7 +90,7 @@
               <span style="font-weight:700; color:#fff; font-size:1rem;">Total</span>
               <span style="font-weight:900; color:var(--earth-gold); font-size:1.1rem;"><%= formatRupiah(total) %></span>
             </div>
-            <button class="btn-gold w-100" style="border-radius:8px; padding:14px; font-size:1rem;">
+            <button class="btn-gold w-100" style="border-radius:8px; padding:14px; font-size:1rem;" id="checkoutBtn">
               Lanjut Checkout →
             </button>
             <a href="/products" style="display:block; text-align:center; margin-top:14px; font-size:0.85rem; color:#a08878;">
@@ -103,5 +103,15 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('checkoutBtn').addEventListener('click', function() {
+      var total = '<%= formatRupiah(total) %>';
+      alert(
+        'Terima kasih telah berbelanja di Heelstivate! 🛍️\n\n' +
+        'Silakan lakukan pembayaran sebesar ' + total + ' sesuai dengan total produk yang Anda beli.\n\n' +
+        'Pesanan Anda akan segera kami proses setelah pembayaran dikonfirmasi.'
+      );
+    });
+  </script>
 </body>
 </html>

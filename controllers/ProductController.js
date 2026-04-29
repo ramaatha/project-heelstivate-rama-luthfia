@@ -128,20 +128,20 @@ class ProductController {
     }
   }
 
-  static async postDeleteProduct(req, res) {
-    try {
-      var id = req.params.id;
-      var product = await Product.findByPk(id);
+  static postDeleteProduct(req, res) {
+    var id = req.params.id;
 
-      if (!product) {
-        return res.send("Produk tidak ditemukan");
-      }
-
-      await product.destroy();
-      res.redirect("/products");
-    } catch (error) {
-      res.send(error.message);
-    }
+    Product.findByPk(id)
+      .then(function (product) {
+        if (!product) throw new Error("Produk tidak ditemukan");
+        return product.destroy();
+      })
+      .then(function () {
+        res.redirect("/products");
+      })
+      .catch(function (error) {
+        res.send(error.message);
+      });
   }
 }
 

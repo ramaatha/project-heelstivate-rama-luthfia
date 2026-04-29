@@ -36,24 +36,6 @@ module.exports = {
       imgUrl: {
         type: Sequelize.STRING,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Categories",
-          key: "id",
-        },
-        onDelete: "SET NULL",
-        onUpdate: "CASCADE",
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
