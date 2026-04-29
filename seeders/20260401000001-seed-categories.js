@@ -2,15 +2,15 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    let categories = require("../data/categories.json")
+    let categories = require("../data/categories.json");
     categories = categories.map((el) => {
-      delete el.id
-      el.createdAt = new Date()
-      el.updatedAt = new Date()
-      return el
-    })
+      delete el.id;
+      el.createdAt = new Date();
+      el.updatedAt = new Date();
+      return el;
+    });
 
-    await queryInterface.bulkInsert("Categories", categories)
+    await queryInterface.bulkInsert("Categories", categories, {});
   },
 
   async down(queryInterface, Sequelize) {
