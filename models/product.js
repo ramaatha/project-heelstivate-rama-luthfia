@@ -4,12 +4,12 @@ const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static async getAll(query) {
-      var search = query.search || "";
-      var sort = query.sort || "";
-      var categoryId = query.categoryId || "";
+      const search = query.search || "";
+      const sort = query.sort || "";
+      const categoryId = query.categoryId || "";
 
-      var where = {};
-      var order = [];
+      const where = {};
+      const order = [];
 
       if (search) {
         where.name = { [Op.iLike]: "%" + search + "%" };
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       else if (sort === "price_desc") order.push(["price", "DESC"]);
       else if (sort === "terlaris") order.push(["sold", "DESC"]);
 
-      var products = await Product.findAll({
+      const products = await Product.findAll({
         where: where,
         order: order,
         include: [
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static async getById(id) {
-      var product = await Product.findByPk(id, {
+      const product = await Product.findByPk(id, {
         include: [
           { model: sequelize.models.Category, as: "Category" },
           { model: sequelize.models.User, as: "User" },

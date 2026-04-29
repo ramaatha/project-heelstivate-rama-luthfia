@@ -46,18 +46,29 @@
 
           <div style="background:var(--earth-sand); border-radius:10px; padding:16px; margin-bottom:20px; border:1px solid var(--earth-border);">
             <div class="row g-2 text-center">
-              <div class="col-4">
+              <% if (session && session.role === 'buyer') { %>
+              <div class="col-4" id="sizeColumn" style="display:none;">
                 <div style="font-size:0.75rem; color:var(--earth-muted); margin-bottom:4px; text-transform:uppercase; font-weight:700;">Ukuran</div>
-                <div class="size-badge mx-auto"><%= product.size %></div>
+                <div class="size-badge mx-auto" id="sizeBadgeBox"></div>
               </div>
-              <div class="col-4">
+              <div class="col-4" id="stockCol">
                 <div style="font-size:0.75rem; color:var(--earth-muted); margin-bottom:4px; text-transform:uppercase; font-weight:700;">Stok</div>
                 <div style="font-weight:800; font-size:1.1rem; color:var(--earth-dark);"><%= product.stock %></div>
               </div>
-              <div class="col-4">
+              <div class="col-4" id="soldCol">
                 <div style="font-size:0.75rem; color:var(--earth-muted); margin-bottom:4px; text-transform:uppercase; font-weight:700;">Terjual</div>
                 <div style="font-weight:800; font-size:1.1rem; color:var(--earth-primary);"><%= product.sold %></div>
               </div>
+              <% } else { %>
+              <div class="col-6">
+                <div style="font-size:0.75rem; color:var(--earth-muted); margin-bottom:4px; text-transform:uppercase; font-weight:700;">Stok</div>
+                <div style="font-weight:800; font-size:1.1rem; color:var(--earth-dark);"><%= product.stock %></div>
+              </div>
+              <div class="col-6">
+                <div style="font-size:0.75rem; color:var(--earth-muted); margin-bottom:4px; text-transform:uppercase; font-weight:700;">Terjual</div>
+                <div style="font-weight:800; font-size:1.1rem; color:var(--earth-primary);"><%= product.sold %></div>
+              </div>
+              <% } %>
             </div>
           </div>
 
@@ -183,8 +194,14 @@
         });
         btn.classList.add('selected');
         document.getElementById('selectedSize').value = btn.dataset.size;
-        var badge = document.querySelector('.size-badge');
-        if (badge) badge.textContent = btn.dataset.size;
+
+        var sizeColumn = document.getElementById('sizeColumn');
+        if (sizeColumn) {
+          sizeColumn.style.display = '';
+          document.getElementById('sizeBadgeBox').textContent = btn.dataset.size;
+          document.getElementById('stockCol').className = 'col-4';
+          document.getElementById('soldCol').className = 'col-4';
+        }
       });
     });
 

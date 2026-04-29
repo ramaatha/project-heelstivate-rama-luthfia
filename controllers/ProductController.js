@@ -5,12 +5,12 @@ const QRCode = require("qrcode");
 class ProductController {
   static async getProducts(req, res) {
     try {
-      var search = req.query.search || "";
-      var sort = req.query.sort || "";
-      var categoryId = req.query.categoryId || "";
+      const search = req.query.search || "";
+      const sort = req.query.sort || "";
+      const categoryId = req.query.categoryId || "";
 
-      var products = await Product.getAll({ search, sort, categoryId });
-      var categories = await Category.findAll();
+      const products = await Product.getAll({ search, sort, categoryId });
+      const categories = await Category.findAll();
 
       res.render("products/index", {
         products,
@@ -27,15 +27,15 @@ class ProductController {
 
   static async getProductDetail(req, res) {
     try {
-      var id = req.params.id;
-      var product = await Product.getById(id);
+      const id = req.params.id;
+      const product = await Product.getById(id);
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
       }
 
-      var productUrl = "http://localhost:3000/products/" + id;
-      var qrCode = await QRCode.toDataURL(productUrl, {
+      const productUrl = `http://localhost:3000/products/${id}`;
+      const qrCode = await QRCode.toDataURL(productUrl, {
         width: 180,
         margin: 2,
         color: { dark: "#3E2723", light: "#FDF6EC" },
@@ -55,8 +55,8 @@ class ProductController {
 
   static async getAddProduct(req, res) {
     try {
-      var categories = await Category.findAll();
-      res.render("products/add", { categories, error: null });
+      const categories = await Category.findAll();
+      res.render("products/add", { categories, errors: [] });
     } catch (error) {
       res.send(error.message);
     }
@@ -78,22 +78,22 @@ class ProductController {
 
       res.redirect("/products");
     } catch (error) {
-      var categories = await Category.findAll();
-      var errorMsg = error.errors ? error.errors[0].message : error.message;
-      res.render("products/add", { categories, error: errorMsg });
+      const categories = await Category.findAll();
+      const errors = error.errors ? error.errors.map((e) => e.message) : [error.message];
+      res.render("products/add", { categories, errors });
     }
   }
 
   static async getEditProduct(req, res) {
     try {
-      var id = req.params.id;
-      var product = await Product.getById(id);
+      const id = req.params.id;
+      const product = await Product.getById(id);
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
       }
 
-      var categories = await Category.findAll();
+      const categories = await Category.findAll();
       res.render("products/edit", { product, categories, error: null });
     } catch (error) {
       res.send(error.message);
@@ -102,8 +102,8 @@ class ProductController {
 
   static async postEditProduct(req, res) {
     try {
-      var id = req.params.id;
-      var product = await Product.findByPk(id);
+      const id = req.params.id;
+      const product = await Product.findByPk(id);
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
@@ -121,25 +121,25 @@ class ProductController {
 
       res.redirect("/products");
     } catch (error) {
-      var errorMsg = error.errors ? error.errors[0].message : error.message;
-      var product = await Product.findByPk(req.params.id);
-      var categories = await Category.findAll();
+      const errorMsg = error.errors ? error.errors[0].message : error.message;
+      const product = await Product.findByPk(req.params.id);
+      const categories = await Category.findAll();
       res.render("products/edit", { product, categories, error: errorMsg });
     }
   }
 
   static postDeleteProduct(req, res) {
-    var id = req.params.id;
+    const id = req.params.id;
 
     Product.findByPk(id)
-      .then(function (product) {
+      .then((product) => {
         if (!product) throw new Error("Produk tidak ditemukan");
         return product.destroy();
       })
-      .then(function () {
+      .then(() => {
         res.redirect("/products");
       })
-      .catch(function (error) {
+      .catch((error) => {
         res.send(error.message);
       });
   }

@@ -4,10 +4,10 @@ const { formatRupiah } = require("../helpers/helper");
 class CartController {
   static async getCart(req, res) {
     try {
-      var userId = req.session.userId;
+      const userId = req.session.userId;
 
-      var carts = await Cart.findAll({
-        where: { userId: userId },
+      const carts = await Cart.findAll({
+        where: { userId },
         include: [
           {
             model: Product,
@@ -21,14 +21,14 @@ class CartController {
       res.send(error.message);
     }
   }
-  
+
   static async postAddToCart(req, res) {
     try {
-      var userId = req.session.userId;
-      var productId = req.params.productId;
-      var quantity = Number(req.body.quantity) || 1;
+      const userId = req.session.userId;
+      const productId = req.params.productId;
+      const quantity = Number(req.body.quantity) || 1;
 
-      var product = await Product.findByPk(productId);
+      const product = await Product.findByPk(productId);
       if (!product) {
         return res.send("Produk tidak ditemukan");
       }
@@ -37,12 +37,12 @@ class CartController {
         return res.send("Stok tidak mencukupi");
       }
 
-      var existingCart = await Cart.findOne({
-        where: { userId: userId, productId: productId },
+      const existingCart = await Cart.findOne({
+        where: { userId, productId },
       });
 
       if (existingCart) {
-        var newQty = existingCart.quantity + quantity;
+        const newQty = existingCart.quantity + quantity;
         await existingCart.update({ quantity: newQty });
       } else {
         await Cart.create({ userId, productId, quantity });
@@ -59,20 +59,16 @@ class CartController {
     }
   }
 
-  static postDeleteCart(req, res) {
-    var id = req.params.id;
-
-    Cart.findByPk(id)
-      .then(function (cart) {
-        if (!cart) throw new Error("Item tidak ditemukan");
-        return cart.destroy();
-      })
-      .then(function () {
-        res.redirect("/cart");
-      })
-      .catch(function (error) {
-        res.send(error.message);
-      });
+  static async postDeleteCart(req, res) {
+    try {
+      const id = req.params.id;
+      const cart = await Cart.findByPk(id);
+      if (!cart) throw new Error("Item tidak ditemukan");
+      await cart.destroy();
+      res.redirect("/cart");
+    } catch (error) {
+      res.send(error.message);
+    }
   }
 }
 

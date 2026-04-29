@@ -4,9 +4,9 @@ const { formatDate, timeAgo } = require("../helpers/helper");
 class ProfileController {
   static async getProfile(req, res) {
     try {
-      var userId = req.session.userId;
+      const userId = req.session.userId;
 
-      var user = await User.findByPk(userId, {
+      const user = await User.findByPk(userId, {
         include: [{ model: Profile }],
       });
 
@@ -18,8 +18,8 @@ class ProfileController {
 
   static async postUpdateProfile(req, res) {
     try {
-      var userId = req.session.userId;
-      var profile = await Profile.findOne({ where: { userId: userId } });
+      const userId = req.session.userId;
+      const profile = await Profile.findOne({ where: { userId } });
 
       if (profile) {
         await profile.update({
@@ -32,7 +32,7 @@ class ProfileController {
           address: req.body.address,
           phoneNumber: req.body.phoneNumber,
           avatarUrl: req.body.avatarUrl,
-          userId: userId,
+          userId,
         });
       }
 

@@ -8,15 +8,15 @@ class AuthController {
 
   static async postLogin(req, res) {
     try {
-      var email = req.body.email;
-      var password = req.body.password;
+      const email = req.body.email;
+      const password = req.body.password;
 
-      var user = await User.findOne({ where: { email: email } });
+      const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.render("auth/login", { error: "Email tidak ditemukan" });
       }
 
-      var isMatch = bcrypt.compareSync(password, user.password);
+      const isMatch = bcrypt.compareSync(password, user.password);
       if (!isMatch) {
         return res.render("auth/login", { error: "Password salah" });
       }
@@ -37,16 +37,16 @@ class AuthController {
 
   static async postRegister(req, res) {
     try {
-      var username = req.body.username;
-      var email = req.body.email;
-      var password = req.body.password;
-      var role = req.body.role;
+      const username = req.body.username;
+      const email = req.body.email;
+      const password = req.body.password;
+      const role = req.body.role;
 
       await User.create({ username, email, password, role });
 
       res.redirect("/login");
     } catch (error) {
-      var errorMsg = error.errors ? error.errors[0].message : error.message;
+      const errorMsg = error.errors ? error.errors[0].message : error.message;
       res.render("auth/register", { error: errorMsg });
     }
   }

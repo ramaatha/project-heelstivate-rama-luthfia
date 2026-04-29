@@ -66,9 +66,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "User",
       hooks: {
-        beforeCreate: function (user) {
-          var salt = bcrypt.genSaltSync(10);
-          user.password = bcrypt.hashSync(user.password, salt);
+        beforeCreate(user) {
+          user.password = bcrypt.hashSync(user.password, 10);
         },
       },
     }

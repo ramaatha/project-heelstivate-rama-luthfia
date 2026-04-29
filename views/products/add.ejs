@@ -24,39 +24,43 @@
       <div class="col-md-8">
         <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:32px;">
 
-          <% if (error) { %>
-          <div class="alert-earth mb-4">⚠️ <%= error %></div>
+          <% if (errors && errors.length > 0) { %>
+          <div style="margin-bottom:20px;">
+            <% errors.forEach(function(msg) { %>
+            <p style="color:#c62828; font-size:0.9rem; margin-bottom:6px;">⚠️ <%= msg %></p>
+            <% }) %>
+          </div>
           <% } %>
 
-          <form action="/products" method="POST" class="form-earth">
+          <form action="/products" method="POST" class="form-earth" novalidate>
             <div class="mb-3">
               <label>Nama Produk</label>
-              <input type="text" name="name" class="form-control" placeholder="Contoh: Nike Air Max 90" required>
+              <input type="text" name="name" class="form-control" placeholder="Contoh: Nike Air Max 90">
             </div>
             <div class="mb-3">
               <label>Deskripsi</label>
-              <textarea name="description" class="form-control" rows="4" placeholder="Deskripsi lengkap produk..." required></textarea>
+              <textarea name="description" class="form-control" rows="4" placeholder="Deskripsi lengkap produk..."></textarea>
             </div>
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label>Harga (Rp)</label>
-                <input type="number" name="price" class="form-control" placeholder="150000" min="1000" max="50000000" required>
+                <input type="number" name="price" class="form-control" placeholder="150000">
                 <small style="color:var(--earth-muted); font-size:0.78rem;">Min Rp 1.000 · Max Rp 50.000.000</small>
               </div>
               <div class="col-md-6">
                 <label>Ukuran (EU)</label>
-                <input type="number" name="size" class="form-control" placeholder="42" min="20" max="50" required>
+                <input type="number" name="size" class="form-control" placeholder="42">
                 <small style="color:var(--earth-muted); font-size:0.78rem;">Ukuran EU 20 - EU 50</small>
               </div>
             </div>
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label>Stok</label>
-                <input type="number" name="stock" class="form-control" placeholder="10" min="0" required>
+                <input type="number" name="stock" class="form-control" placeholder="10">
               </div>
               <div class="col-md-6">
                 <label>Kategori</label>
-                <select name="categoryId" class="form-select" required>
+                <select name="categoryId" class="form-select">
                   <option value="">-- Pilih Kategori --</option>
                   <% categories.forEach(function(cat) { %>
                   <option value="<%= cat.id %>"><%= cat.name %></option>
