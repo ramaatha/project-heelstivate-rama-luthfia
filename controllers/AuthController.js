@@ -35,19 +35,18 @@ class AuthController {
   }
 
   static getRegister(req, res) {
-    res.render("auth/register", { errors: [] });
+    res.render("auth/register", { errors: [], old: {} });
   }
 
   static async postRegister(req, res) {
+    const { username, email, password, role } = req.body;
     try {
-      const { username, email, password, role } = req.body;
-
       await User.create({ username, email, password, role });
 
       res.redirect("/login");
     } catch (error) {
       const errors = error.errors ? error.errors.map((e) => e.message) : [error.message];
-      res.render("auth/register", { errors });
+      res.render("auth/register", { errors, old: { username, email, role } });
     }
   }
 

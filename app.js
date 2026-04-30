@@ -20,8 +20,13 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(function (req, res, next) {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
+
 app.use("/", router);
 
 app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+  console.log("Heelstivate is running on http://localhost:3000");
 });

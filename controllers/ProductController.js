@@ -1,14 +1,32 @@
-const { Product, Category } = require("../models");
+const { Product, Category, User } = require("../models");
+const { Op } = require("sequelize");
 const { formatRupiah, formatDate, timeAgo } = require("../helpers/helper");
 const QRCode = require("qrcode");
 
 class ProductController {
   static async getProducts(req, res) {
     try {
-      const { search = "", sort = "", categoryId = "" } = req.query;
+      let { search = "", sort = "", categoryId = "" } = req.query;
+      let options = {
+        include: [
+          { model: Category, as: "Category" },
+          { model: User, as: "User" },
+        ],
+        order: [],
+      };
 
-      const products = await Product.getAll({ search, sort, categoryId });
-      const categories = await Category.findAll();
+      if (search || categoryId) {
+        options.where = {};
+        if (search) options.where.name = { [Op.iLike]: `%${search}%` };
+        if (categoryId) options.where.categoryId = categoryId;
+      }
+
+      if (sort === "price_asc") options.order.push(["price", "ASC"]);
+      else if (sort === "price_desc") options.order.push(["price", "DESC"]);
+      else if (sort === "terlaris") options.order.push(["sold", "DESC"]);
+
+      let products = await Product.findAll(options);
+      let categories = await Category.findAll();
 
       res.render("products/index", {
         products,
@@ -26,13 +44,18 @@ class ProductController {
   static async getProductDetail(req, res) {
     try {
       const { id } = req.params;
-      const product = await Product.getById(id);
+      const product = await Product.findByPk(id, {
+        include: [
+          { model: Category, as: "Category" },
+          { model: User, as: "User" },
+        ],
+      });
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
       }
 
-      const productUrl = `http://10.0.0.91:3000/products/${id}`;
+      const productUrl = `http://localhost:3000/products/${id}`;
       const qrCode = await QRCode.toDataURL(productUrl, {
         width: 180,
         margin: 2,
@@ -61,8 +84,8 @@ class ProductController {
   }
 
   static async postAddProduct(req, res) {
+    let { userId } = req.session;
     try {
-      const { userId } = req.session;
       const { name, description, price, size, stock, imgUrl, categoryId } = req.body;
       await Product.create({
         name,
@@ -72,7 +95,7 @@ class ProductController {
         stock: stock !== "" ? stock : null,
         sold: 0,
         imgUrl,
-        categoryId,
+        categoryId: categoryId !== "" ? categoryId : null,
         userId,
       });
 
@@ -87,7 +110,12 @@ class ProductController {
   static async getEditProduct(req, res) {
     try {
       const { id } = req.params;
-      const product = await Product.getById(id);
+      const product = await Product.findByPk(id, {
+        include: [
+          { model: Category, as: "Category" },
+          { model: User, as: "User" },
+        ],
+      });
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
@@ -101,10 +129,10 @@ class ProductController {
   }
 
   static async postEditProduct(req, res) {
+    let { id } = req.params;
+    let { name, description, price, size, stock, imgUrl, categoryId } = req.body;
     try {
-      const { id } = req.params;
-      const { name, description, price, size, stock, imgUrl, categoryId } = req.body;
-      const product = await Product.findByPk(id);
+      let product = await Product.findByPk(id);
 
       if (!product) {
         return res.send("Produk tidak ditemukan");
@@ -117,22 +145,22 @@ class ProductController {
         size: size !== "" ? size : null,
         stock: stock !== "" ? stock : null,
         imgUrl,
-        categoryId,
+        categoryId: categoryId !== "" ? categoryId : null,
       });
 
       res.redirect("/products");
     } catch (error) {
-      const errors = error.errors ? error.errors.map((e) => e.message) : [error.message];
-      const product = await Product.findByPk(req.params.id);
-      const categories = await Category.findAll();
+      let errors = error.errors ? error.errors.map((e) => e.message) : [error.message];
+      let product = await Product.findByPk(id);
+      let categories = await Category.findAll();
       res.render("products/edit", { product, categories, errors });
     }
   }
 
   static postDeleteProduct(req, res) {
-    const { id } = req.params;
+    let { id } = req.params;
 
-    Product.findByPk(id)
+    Product.getById(id)
       .then((product) => {
         if (!product) throw new Error("Produk tidak ditemukan");
         return product.destroy();

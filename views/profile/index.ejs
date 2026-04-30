@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
   <%- include('../partials/navbar') %>
 
@@ -22,8 +24,7 @@
       <div class="col-md-4">
         <div style="background:#fff; border-radius:16px; border:1px solid var(--earth-border); padding:32px; text-align:center;">
           <div style="position:relative; display:inline-block; margin-bottom:16px; cursor:pointer;" onclick="document.getElementById('avatarFileInput').click()" title="Klik untuk ganti foto">
-            <img id="avatarPreview" src="<%= user.Profile && user.Profile.avatarUrl ? user.Profile.avatarUrl : 'https://placehold.co/120x120/D7B896/3E2723?text=' + user.username[0].toUpperCase() %>"
-              style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--earth-accent); display:block;" alt="">
+            <img id="avatarPreview" src="<%= user.Profile && user.Profile.avatarUrl ? user.Profile.avatarUrl : 'https://placehold.co/120x120/D7B896/3E2723?text=' + user.username[0].toUpperCase() %>" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--earth-accent); display:block;" alt="">
             <div style="position:absolute; bottom:0; right:0; background:var(--earth-primary); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:2px solid #fff;">
               <span style="color:#fff; font-size:0.75rem;">📷</span>
             </div>
@@ -37,10 +38,10 @@
             <p style="font-size:0.75rem; color:var(--earth-light); margin-bottom:0;"><%= formatDate(user.createdAt) %></p>
           </div>
           <% if (user.Profile && user.Profile.phoneNumber) { %>
-            <p style="margin-top:12px; font-size:0.85rem; color:var(--earth-muted);">📞 <%= user.Profile.phoneNumber %></p>
+          <p style="margin-top:12px; font-size:0.85rem; color:var(--earth-muted);">📞 <%= user.Profile.phoneNumber %></p>
           <% } %>
           <% if (user.Profile && user.Profile.address) { %>
-            <p style="font-size:0.85rem; color:var(--earth-muted);">📍 <%= user.Profile.address %></p>
+          <p style="font-size:0.85rem; color:var(--earth-muted);">📍 <%= user.Profile.address %></p>
           <% } %>
         </div>
       </div>
@@ -51,15 +52,11 @@
           <form action="/profile/update" method="POST" class="form-earth">
             <div class="mb-3">
               <label>Alamat</label>
-              <input type="text" name="address" class="form-control"
-                value="<%= user.Profile && user.Profile.address ? user.Profile.address : '' %>"
-                placeholder="Alamat lengkap kamu">
+              <input type="text" name="address" class="form-control" value="<%= user.Profile && user.Profile.address ? user.Profile.address : '' %>" placeholder="Alamat lengkap kamu">
             </div>
             <div class="mb-3">
               <label>Nomor HP</label>
-              <input type="text" name="phoneNumber" class="form-control"
-                value="<%= user.Profile && user.Profile.phoneNumber ? user.Profile.phoneNumber : '' %>"
-                placeholder="08xxxxxxxxxx">
+              <input type="text" name="phoneNumber" class="form-control" value="<%= user.Profile && user.Profile.phoneNumber ? user.Profile.phoneNumber : '' %>" placeholder="08xxxxxxxxxx">
             </div>
             <input type="hidden" name="avatarUrl" id="avatarUrlInput" value="<%= user.Profile && user.Profile.avatarUrl ? user.Profile.avatarUrl : '' %>">
             <button type="submit" class="btn-earth" style="border-radius:8px; padding:12px 28px;">Simpan Perubahan</button>
@@ -100,4 +97,5 @@
     });
   </script>
 </body>
+
 </html>

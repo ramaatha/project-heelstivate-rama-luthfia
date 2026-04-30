@@ -2,12 +2,15 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert("Categories", [
-      { name: "Sports", createdAt: new Date(), updatedAt: new Date() },
-      { name: "Casual", createdAt: new Date(), updatedAt: new Date() },
-      { name: "Formal", createdAt: new Date(), updatedAt: new Date() },
-      { name: "Womenswear", createdAt: new Date(), updatedAt: new Date() },
-    ]);
+    let categories = require("../data/categories.json");
+    categories = categories.map((el) => {
+      delete el.id;
+      el.createdAt = new Date();
+      el.updatedAt = new Date();
+      return el;
+    });
+
+    await queryInterface.bulkInsert("Categories", categories);
   },
 
   async down(queryInterface, Sequelize) {

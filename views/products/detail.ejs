@@ -99,10 +99,11 @@
             </div>
             <div class="d-flex gap-2 mb-3">
               <div class="form-earth" style="flex:0 0 90px;">
-                <input type="number" name="quantity" class="form-control" value="1" min="1" max="<%= product.stock %>" style="text-align:center; font-weight:700;">
+                <input type="number" name="quantity" id="quantityInput" class="form-control" value="1" style="text-align:center; font-weight:700;">
               </div>
               <button type="submit" id="addCartBtn" class="btn-earth flex-grow-1" style="border-radius:8px;">🛒 Masukkan Keranjang</button>
             </div>
+            <div id="quantityError" style="display:none; color:#c62828; font-size:0.85rem; margin-top:-8px; margin-bottom:8px;"></div>
           </form>
           <% } %>
 
@@ -209,9 +210,31 @@
     if (form) {
       form.addEventListener('submit', function(e) {
         var size = document.getElementById('selectedSize').value;
+        var qty = parseInt(document.getElementById('quantityInput').value);
+        var stock = <%= product.stock %>;
+        var errorDiv = document.getElementById('quantityError');
+
+        errorDiv.style.display = 'none';
+        errorDiv.textContent = '';
+
         if (!size) {
           e.preventDefault();
           alert('Pilih ukuran terlebih dahulu!');
+          return;
+        }
+
+        if (isNaN(qty) || qty < 1) {
+          e.preventDefault();
+          errorDiv.textContent = 'Jumlah minimal adalah 1.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        if (qty > stock) {
+          e.preventDefault();
+          errorDiv.textContent = 'Jumlah melebihi stok yang tersedia (' + stock + ').';
+          errorDiv.style.display = 'block';
+          return;
         }
       });
     }

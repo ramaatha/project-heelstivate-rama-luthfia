@@ -1,48 +1,10 @@
 "use strict";
-const { Model, Op } = require("sequelize");
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    static async getAll(query) {
-      const search = query.search || "";
-      const sort = query.sort || "";
-      const categoryId = query.categoryId || "";
-
-      const where = {};
-      const order = [];
-
-      if (search) {
-        where.name = { [Op.iLike]: "%" + search + "%" };
-      }
-
-      if (categoryId) {
-        where.categoryId = categoryId;
-      }
-
-      if (sort === "price_asc") order.push(["price", "ASC"]);
-      else if (sort === "price_desc") order.push(["price", "DESC"]);
-      else if (sort === "terlaris") order.push(["sold", "DESC"]);
-
-      const products = await Product.findAll({
-        where: where,
-        order: order,
-        include: [
-          { model: sequelize.models.Category, as: "Category" },
-          { model: sequelize.models.User, as: "User" },
-        ],
-      });
-
-      return products;
-    }
-
-    static async getById(id) {
-      const product = await Product.findByPk(id, {
-        include: [
-          { model: sequelize.models.Category, as: "Category" },
-          { model: sequelize.models.User, as: "User" },
-        ],
-      });
-      return product;
+    static getById(id) {
+      return Product.findByPk(id);
     }
 
     formatPrice() {
@@ -143,6 +105,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       categoryId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { msg: "Kategori wajib dipilih" },
+        },
       },
       userId: {
         type: DataTypes.INTEGER,

@@ -25,19 +25,22 @@ Pair Project Phase 1 Hacktiv8 — Full Stack Web App menggunakan Node.js, Expres
 
 ```
 heelstivate/
-├── config/           → konfigurasi database (config.json)
-├── controllers/      → logic handler setiap route
+├── config/
+├── controllers/
 │   ├── AuthController.js
 │   ├── CartController.js
 │   ├── DashboardController.js
 │   ├── ProductController.js
 │   └── ProfileController.js
+├── data/
+│   ├── categories.json
+│   └── products.json
 ├── helpers/
-│   └── helper.js     → formatRupiah(), formatDate(), timeAgo()
+│   └── helper.js
 ├── middlewares/
-│   └── auth.js       → isLoggedIn, isSeller
-├── migrations/       → file migration database (8 file)
-├── models/           → definisi model + asosiasi Sequelize
+│   └── auth.js
+├── migrations/
+├── models/
 │   ├── user.js
 │   ├── product.js
 │   ├── category.js
@@ -45,19 +48,19 @@ heelstivate/
 │   ├── cart.js
 │   └── index.js
 ├── public/css/
-│   └── main.css      → earthy theme custom stylesheet
+│   └── main.css
 ├── routes/
-│   └── index.js      → definisi semua route
-├── seeders/          → data awal database (3 file)
+│   └── index.js
+├── seeders/
 ├── views/
-│   ├── auth/         → login.ejs, register.ejs
-│   ├── cart/         → index.ejs
-│   ├── dashboard/    → index.ejs
-│   ├── partials/     → navbar.ejs
-│   ├── products/     → index.ejs, detail.ejs, add.ejs, edit.ejs
-│   ├── profile/      → index.ejs
+│   ├── auth/
+│   ├── cart/
+│   ├── dashboard/
+│   ├── partials/
+│   ├── products/
+│   ├── profile/
 │   └── landing.ejs
-└── app.js            → entry point server
+└── app.js
 ```
 
 ---

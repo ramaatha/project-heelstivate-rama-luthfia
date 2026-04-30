@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
   <%- include('../partials/navbar') %>
 
@@ -19,86 +21,84 @@
 
   <div class="container py-5">
     <% if (carts.length === 0) { %>
-      <div class="text-center py-5">
-        <div style="font-size:4rem; margin-bottom:16px;">🛒</div>
-        <h4 style="color:var(--earth-muted); margin-bottom:8px;">Keranjang kamu kosong</h4>
-        <p style="color:var(--earth-muted);">Yuk temukan sepatu favoritmu!</p>
-        <a href="/products" class="btn-earth" style="display:inline-block; margin-top:16px; border-radius:8px; padding:12px 28px;">Lihat Produk</a>
-      </div>
+    <div class="text-center py-5">
+      <div style="font-size:4rem; margin-bottom:16px;">🛒</div>
+      <h4 style="color:var(--earth-muted); margin-bottom:8px;">Keranjang kamu kosong</h4>
+      <p style="color:var(--earth-muted);">Yuk temukan sepatu favoritmu!</p>
+      <a href="/products" class="btn-earth" style="display:inline-block; margin-top:16px; border-radius:8px; padding:12px 28px;">Lihat Produk</a>
+    </div>
     <% } else { %>
-      <div class="row g-4">
-        <div class="col-md-8">
-          <div class="cart-table">
-            <table class="table mb-0">
-              <thead>
-                <tr>
-                  <th>Produk</th>
-                  <th class="text-center">Qty</th>
-                  <th class="text-end">Subtotal</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% var total = 0; %>
-                <% carts.forEach(function(cart) { %>
-                  <% var subtotal = cart.Product ? cart.Product.price * cart.quantity : 0; %>
-                  <% total += subtotal; %>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-3">
-                        <img src="<%= cart.Product && cart.Product.imgUrl ? cart.Product.imgUrl : 'https://placehold.co/70x70/D7B896/3E2723?text=?' %>"
-                          style="width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--earth-border);" alt="">
-                        <div>
-                          <div style="font-weight:700; color:var(--earth-text); font-size:0.95rem;"><%= cart.Product ? cart.Product.name : '-' %></div>
-                          <% if (cart.Product && cart.Product.Category) { %>
-                            <span class="badge-category"><%= cart.Product.Category.name %></span>
-                          <% } %>
-                          <div style="font-size:0.8rem; color:var(--earth-muted); margin-top:4px;">EU <%= cart.Product ? cart.Product.size : '-' %></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center">
-                      <span style="font-weight:700; font-size:1rem; color:var(--earth-primary);">× <%= cart.quantity %></span>
-                    </td>
-                    <td class="text-end">
-                      <span style="font-weight:700; color:var(--earth-dark);">
-                        <%= cart.Product ? formatRupiah(subtotal) : '-' %>
-                      </span>
-                    </td>
-                    <td class="text-end">
-                      <form action="/cart/<%= cart.id %>/delete" method="POST">
-                        <button type="submit" onclick="return confirm('Hapus item ini?')"
-                          style="background:none; border:none; color:#c62828; font-size:1.1rem; cursor:pointer;" title="Hapus">✕</button>
-                      </form>
-                    </td>
-                  </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="order-summary-box">
-            <h5 style="font-weight:800; color:#fff; margin-bottom:20px;">Ringkasan Order</h5>
-            <div class="d-flex justify-content-between mb-2" style="font-size:0.9rem; color:#d7c4bc;">
-              <span>Total Item</span>
-              <span><%= carts.length %> produk</span>
-            </div>
-            <hr style="border-color:#5a3e37; margin:16px 0;">
-            <div class="d-flex justify-content-between mb-4">
-              <span style="font-weight:700; color:#fff; font-size:1rem;">Total</span>
-              <span style="font-weight:900; color:var(--earth-gold); font-size:1.1rem;"><%= formatRupiah(total) %></span>
-            </div>
-            <button class="btn-gold w-100" style="border-radius:8px; padding:14px; font-size:1rem;" id="checkoutBtn">
-              Lanjut Checkout →
-            </button>
-            <a href="/products" style="display:block; text-align:center; margin-top:14px; font-size:0.85rem; color:#a08878;">
-              ← Lanjut Belanja
-            </a>
-          </div>
+    <div class="row g-4">
+      <div class="col-md-8">
+        <div class="cart-table">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end">Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% var total = 0; %>
+              <% carts.forEach(function(cart) { %>
+              <% var subtotal = cart.Product ? cart.Product.price * cart.quantity : 0; %>
+              <% total += subtotal; %>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-3">
+                    <img src="<%= cart.Product && cart.Product.imgUrl ? cart.Product.imgUrl : 'https://placehold.co/70x70/D7B896/3E2723?text=?' %>" style="width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--earth-border);" alt="">
+                    <div>
+                      <div style="font-weight:700; color:var(--earth-text); font-size:0.95rem;"><%= cart.Product ? cart.Product.name : '-' %></div>
+                      <% if (cart.Product && cart.Product.Category) { %>
+                      <span class="badge-category"><%= cart.Product.Category.name %></span>
+                      <% } %>
+                      <div style="font-size:0.8rem; color:var(--earth-muted); margin-top:4px;">EU <%= cart.Product ? cart.Product.size : '-' %></div>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span style="font-weight:700; font-size:1rem; color:var(--earth-primary);">× <%= cart.quantity %></span>
+                </td>
+                <td class="text-end">
+                  <span style="font-weight:700; color:var(--earth-dark);">
+                    <%= cart.Product ? formatRupiah(subtotal) : '-' %>
+                  </span>
+                </td>
+                <td class="text-end">
+                  <form action="/cart/<%= cart.id %>/delete" method="POST">
+                    <button type="submit" onclick="return confirm('Hapus item ini?')" style="background:none; border:none; color:#c62828; font-size:1.1rem; cursor:pointer;" title="Hapus">✕</button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <div class="col-md-4">
+        <div class="order-summary-box">
+          <h5 style="font-weight:800; color:#fff; margin-bottom:20px;">Ringkasan Order</h5>
+          <div class="d-flex justify-content-between mb-2" style="font-size:0.9rem; color:#d7c4bc;">
+            <span>Total Item</span>
+            <span><%= carts.length %> produk</span>
+          </div>
+          <hr style="border-color:#5a3e37; margin:16px 0;">
+          <div class="d-flex justify-content-between mb-4">
+            <span style="font-weight:700; color:#fff; font-size:1rem;">Total</span>
+            <span style="font-weight:900; color:var(--earth-gold); font-size:1.1rem;"><%= formatRupiah(total) %></span>
+          </div>
+          <button class="btn-gold w-100" style="border-radius:8px; padding:14px; font-size:1rem;" id="checkoutBtn">
+            Lanjut Checkout →
+          </button>
+          <a href="/products" style="display:block; text-align:center; margin-top:14px; font-size:0.85rem; color:#a08878;">
+            ← Lanjut Belanja
+          </a>
+        </div>
+      </div>
+    </div>
     <% } %>
   </div>
 
@@ -114,4 +114,5 @@
     });
   </script>
 </body>
+
 </html>
